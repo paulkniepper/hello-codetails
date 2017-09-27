@@ -2,7 +2,7 @@
 galaxy_info:
   author: Paul N. Kniepper Gozalez
   description: Ansible role to common environment setup.
-  license: GPL
+  license: MIT
   min_ansible_version: 2.1
   platforms:
   - name: UbuntuDebian
