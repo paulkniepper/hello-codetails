@@ -1,7 +1,7 @@
 ---
 - name: Copy last version of nginx.conf
-  template:
-    src: nginx.conf.j2
+  copy:
+    src: redhat_nginx.conf
     dest: /etc/nginx/nginx.conf
   notify: restart nginx
   tags:
@@ -23,7 +23,7 @@
 - name: Copy Vhost to sites-avaible
   template:
     src: "vhost.conf.j2"
-    dest: "/etc/nginx/conf.d/{{ item.vhost }}"
+    dest: "/etc/nginx/conf.d/{{ item.vhost }}.conf"
   with_items: "{{ nginx_sites }}"
   notify: reload nginx
   tags:

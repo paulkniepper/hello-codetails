@@ -1,7 +1,7 @@
 ---
 - name: Copy last version of nginx.conf
-  template:
-    src: nginx.conf.j2
+  copy:
+    src: debian_nginx.conf
     dest: /etc/nginx/nginx.conf
   notify: restart nginx
   tags:
