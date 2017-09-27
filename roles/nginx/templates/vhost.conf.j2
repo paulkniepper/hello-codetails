@@ -1,0 +1,15 @@
+### Vhost config ###
+server {
+
+  listen 80;
+
+  root /var/www/{{ item.vhost }}/;
+  index index.html;
+
+  server_name {{ item.hostname }}.com www.{{ item.hostname }}.com;
+
+  location / {
+    try_files $uri $uri/ =404;
+  }
+
+}
