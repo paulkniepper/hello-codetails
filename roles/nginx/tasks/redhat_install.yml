@@ -1,0 +1,6 @@
+---
+- name: Install deb package
+  yum:
+    name: nginx
+    state: present
+
