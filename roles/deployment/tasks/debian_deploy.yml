@@ -1,0 +1,28 @@
+---
+- name: Unzip web site
+  unarchive:
+    src: site.tar.gz 
+    dest: "/var/www/"
+    owner: www-data
+    group: www-data
+    mode: 0755
+
+- name: Ensure html file have the right permisions
+  file: 
+    path: "/var/www/{{ project }}/{{ item }}"
+    owner: www-data
+    group: www-data
+    mode: 0644
+  with_items: 
+  - index.html
+  - '/css/styles.css'
+
+- name: Include hostname in html file
+  lineinfile:
+    dest: /var/www/{{ project }}/index.html
+    regexp: '  <p><h1>Hello\ CodeTails'
+    line: '  <p><h1>Hello CodeTails from {{ ansible_distribution }}</h1></p>'
+    owner: www-data
+    group: www-data
+    mode: 0644
+
