@@ -1,0 +1,21 @@
+---
+- name: Full performance of servers and app deployment on ALL nodes
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: install python 2
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+
+  roles:
+  - common_setup
+  - role: nginx
+    nginx_sites:
+    - vhost: 'hello-codetails'
+      hostname: 'codetails-ansible'
+#  - app_setup
+  - deployment
+
+#- include: admin.yml
+
