@@ -1,3 +1,5 @@
 ---
 nginx_sites: []
+nginx_geoip_country_enabled: false
+nginx_map_mobile_agent_enabled: false
 
