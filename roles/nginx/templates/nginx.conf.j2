@@ -1,0 +1,80 @@
+{% if ansible_os_family == 'Debian' %}
+user www-data;
+{% else %}
+user nginx;
+{% endif %}
+worker_processes 4;
+pid /var/run/nginx.pid;
+
+events {
+  worker_connections 768;
+  use epoll;
+  # multi_accept on;
+}
+
+http {
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay on;
+  keepalive_timeout 65;
+  types_hash_max_size 2048;
+  client_max_body_size 200M;
+
+  # server_names_hash_bucket_size 64;
+  # server_name_in_redirect off;
+
+  include /etc/nginx/mime.types;
+  default_type         text/html;
+
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+
+  gzip on;
+  gzip_disable "msie6";
+  set_real_ip_from 0.0.0.0/0;
+  real_ip_header    X-Forwarded-For;
+  real_ip_recursive on;
+
+  # gzip_vary on;
+  gzip_proxied any;
+  # gzip_comp_level 6;
+  # gzip_buffers 16 8k;
+  # gzip_http_version 1.1;
+  gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript image/svg+xml;
+
+  {% if nginx_geoip_country_enabled %}
+    geo $geoip_country {
+      default         1;
+      include         geo_countries.conf;
+      127.0.0.0/24    ES;
+      127.0.0.1/32    ES;
+    }
+  {% endif %}
+
+  {% if nginx_map_mobile_agent_enabled  %}
+    map $http_user_agent $mobile_agent {
+      default false;
+      ~*adsbot.google   false;
+      ~*ipad            false;
+      ~*blackberry      true;
+      ~*phone           true;
+      ~*ipod            true;
+      ~*midp            true;
+      ~*Symbian         true;
+      ~*palm            true;
+      ~*windows.ce      true;
+      ~*^docomo         true;
+      ~*^nokia          true;
+      ~*mobile          true;
+    }
+  {% endif %}
+
+log_format timed_combined '$remote_addr - $remote_user [$time_local]  '
+    '"$request" $status $body_bytes_sent '
+    '"$http_referer" "$http_user_agent" '
+    'rq_time=$request_time up_time=$upstream_response_time '
+    'host=$host';
+
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
+}
