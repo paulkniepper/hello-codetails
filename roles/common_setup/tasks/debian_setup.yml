@@ -1,0 +1,28 @@
+- name: Update apt
+  shell: apt-get update
+
+- name: Ensure /var/www exists and have the right owner
+  file: 
+    path: /var/www 
+    state: directory 
+    owner: www-data 
+    group: www-data
+  tags:
+  - common
+
+- name: Ensure project folder exists and have the right owner
+  file: 
+    path: "/var/www/{{ project }}" 
+    state: directory 
+    owner: www-data 
+    group: www-data
+
+- name: install basic packages [Debian]
+  apt: 
+    name: "{{ item }}" 
+    state: present
+  with_items:
+    - vim
+    - unzip
+  tags:
+  - common

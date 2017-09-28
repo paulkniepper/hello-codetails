@@ -1,41 +1,6 @@
-- name: Ensure /var/www exists and have the right owner [Debian]
-  file: 
-    path: /var/www 
-    state: directory 
-    owner: www-data 
-    group: www-data
-  when: ansible_os_family == 'Debian'
-  tags:
-  - common
-
-- name: install basic packages [Debian]
-  apt: 
-    name: "{{ item }}" 
-    state: present
-  with_items:
-    - unzip
-  when: ansible_os_family == 'Debian'
-  tags:
-  - common
-
-##### CENTOS #####
 ---
-- name: Ensure /var/www exists and have the right owner [RedHat]
-  file: 
-    path: /var/www 
-    state: directory 
-    owner: nginx 
-    group: nginx
-  when: ansible_os_family == 'RedHat'
-  tags:
-  - common
+- include: debian_setup.yml
+  when: ansible_os_family == 'Debian'
 
-- name: install basic packages [RedHat]
-  yum: 
-    name: "{{ item }}"
-    state: present
-  with_items:
-  - epel-release
+- include: redhat_setup.yml
   when: ansible_os_family == 'RedHat'
-  tags:
-  - common
