@@ -29,9 +29,9 @@
 - name: Disable firewalld
   service:
     name: firewalld
-    state: stoped
+    state: stopped
     enabled: no
 
 - name: Disable SELinux until next reboot
-  shell: stenforce Permissive
+  shell: setenforce Permissive
 
