@@ -1,25 +1,25 @@
 ---
 - name: Unzip web site
   unarchive:
-    src: site.tar.gz 
+    src: site.tar.gz
     dest: /var/www/
     owner: nginx
     group: nginx
     mode: 0755
 
 - name: Ensure html file have the right permisions
-  file: 
+  file:
     path: "/var/www/{{ project }}/{{ item }}"
     owner: nginx
     group: nginx
     mode: 0644
-  with_items: 
+  with_items:
   - index.html
   - '/css/styles.css'
 
 - name: Include hostname in html file
   lineinfile:
-    dest: /var/www/{{ project }}/index.html
+    dest: "/var/www/{{ project }}/index.html"
     regexp: '  <p><h1>Hello\ CodeTails'
     line: '  <p><h1>Hello CodeTails from {{ ansible_distribution }}</h1></p>'
     owner: nginx
